@@ -1,5 +1,6 @@
 const Staff = require("../models/staff.model");
 const bcrypt = require("bcryptjs");
+const { generateStaffToken } = require("../utils/staffToken");
 
 // create staff
 exports.createStaff = async (req, res, next) => {
@@ -65,7 +66,7 @@ exports.staffLogin = async (req, res, next) => {
         error: "Email and Password is not correct",
       });
     }
-    // const token = generateToken(staff);
+    const staffToken = generateStaffToken(staff);
 
     const { password: pwd, ...others } = staff.toObject();
 
@@ -74,6 +75,7 @@ exports.staffLogin = async (req, res, next) => {
       message: "Successfully logged in",
       data: {
         staff: others,
+        staffToken,
       },
     });
   } catch (error) {

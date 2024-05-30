@@ -8,10 +8,11 @@ const {
 } = require("../controllers/event.controller");
 const varifyToken = require("../middleware/varifyToken");
 const authorization = require("../middleware/authorization");
+const varifyStaffToken = require("../middleware/varifyStaffToken");
 const router = express.Router();
 
-router.get("/", getAllEvents);
-router.get("/:id", getEvent);
+router.get("/", varifyToken || varifyStaffToken, getAllEvents);
+router.get("/:id", varifyToken || varifyStaffToken, getEvent);
 
 // event managment only admin
 router.patch("/:id", varifyToken, authorization("admin"), eventUpdate);
